@@ -1,4 +1,5 @@
 ﻿using System;
+using CharpLearning.Syntax;
 
 namespace CharpLearning
 {
@@ -6,7 +7,11 @@ namespace CharpLearning
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            //Console.WriteLine("Hello World!");
+            var api = new GCAddApi();
+            api.ArrayTest();
+            api.AllocateArrayTest();
+            api.AllocateUninitializedArrayTest();
         }
     }
 }
