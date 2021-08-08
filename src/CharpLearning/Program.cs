@@ -1,5 +1,4 @@
-﻿using System;
-using CharpLearning.Syntax;
+﻿using CharpLearning.Syntax;
 
 namespace CharpLearning
 {
