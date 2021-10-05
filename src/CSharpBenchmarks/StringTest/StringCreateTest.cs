@@ -2,7 +2,7 @@
 using System.Buffers;
 using BenchmarkDotNet.Attributes;
 
-namespace net6perf
+namespace CSharpBenchmarks.StringTest
 {
     [MemoryDiagnoser]
     [DisassemblyDiagnoser(printSource: true)]
