@@ -230,15 +230,11 @@ namespace CSharpBenchmarks.StringTest
         }
 
         //给Create所需的委托加缓存,而不是每次都创建新的委托实例
-        public SpanAction<char, string> spanAction = null;
+        public SpanAction<char, string> spanAction => CreateAction;
         public string CreateCache(string input)
         {
             int len = input.Length;
 
-            if (spanAction == null) //只有为空的,才会创建委托实例
-            {
-                spanAction = CreateAction; //缓存委托实例
-            }
             return string.Create(len, input, spanAction);
         }
 
