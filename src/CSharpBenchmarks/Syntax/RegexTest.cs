@@ -3,6 +3,7 @@ using BenchmarkDotNet.Attributes;
 
 namespace CSharpBenchmarks.Syntax
 {
+#if NET7_0_OR_GREATER
     [DisassemblyDiagnoser(printSource: true, maxDepth: 3)]
     [MemoryDiagnoser]
     public partial class RegexTest
@@ -49,5 +50,6 @@ namespace CSharpBenchmarks.Syntax
                 }
             }
         }
-    }
+    } 
+#endif
 }
