@@ -4,6 +4,8 @@ using BenchmarkDotNet.Attributes;
 
 namespace CSharpBenchmarks.StringTest
 {
+    [MemoryDiagnoser]
+    [DisassemblyDiagnoser(printSource: true)]
     public class StringSplitTest
     {
         string value = "this, is, a, very long string, with some spaces, commas and more spaces";
