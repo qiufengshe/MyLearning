@@ -47,5 +47,24 @@ namespace CSharpBenchmarks.LinqTest
             }
             return count;
         }
+
+        [Benchmark]
+        public int ForCount()
+        {
+            int count = 0;
+            int val = int.MaxValue / 2;  //计算放到循环外
+            for (int i = 0; i < Numbers.Count; i += 2)
+            {
+                if (Numbers[i] > val)
+                {
+                    count += Numbers[i];
+                }
+                if (Numbers[i + 1] > val)
+                {
+                    count += Numbers[i + 1];
+                }
+            }
+            return count;
+        }
     }
 }
