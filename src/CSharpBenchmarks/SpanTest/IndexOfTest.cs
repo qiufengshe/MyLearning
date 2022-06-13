@@ -38,21 +38,136 @@ namespace CSharpBenchmarks.SpanTest
             return sum;
         }
     }
-    //|          Method |        Job |  Runtime | Toolchain | Times |      Mean |    Error |   StdDev | Ratio | RatioSD | Code Size | Allocated | Alloc Ratio |
-    //|---------------- |----------- |--------- |---------- |------ |----------:|---------:|---------:|------:|--------:|----------:|----------:|------------:|
-    //|     SpanIndexOf | Job-XRUCSY | .NET 7.0 |    net7.0 |  1024 |  15.36 us | 0.108 us | 0.096 us |  0.28 |    0.00 |     845 B |         - |          NA |
-    //|     SpanIndexOf | Job-IWVJPW | .NET 5.0 |    net5.0 |  1024 |  54.19 us | 0.754 us | 0.705 us |  1.00 |    0.00 |     268 B |         - |          NA |
-    //|     SpanIndexOf | Job-VTSQQJ | .NET 6.0 |    net6.0 |  1024 |  61.68 us | 0.464 us | 0.434 us |  1.14 |    0.02 |     268 B |         - |          NA |
-    //|                 |            |          |           |       |           |          |          |       |         |           |           |             |
-    //| SpanLastIndexOf | Job-XRUCSY | .NET 7.0 |    net7.0 |  1024 |  16.75 us | 0.045 us | 0.035 us |  0.69 |    0.01 |     832 B |         - |          NA |
-    //| SpanLastIndexOf | Job-IWVJPW | .NET 5.0 |    net5.0 |  1024 |  24.30 us | 0.257 us | 0.215 us |  1.00 |    0.00 |     268 B |         - |          NA |
-    //| SpanLastIndexOf | Job-VTSQQJ | .NET 6.0 |    net6.0 |  1024 |  25.22 us | 0.069 us | 0.054 us |  1.04 |    0.01 |     268 B |         - |          NA |
-    //|                 |            |          |           |       |           |          |          |       |         |           |           |             |
-    //|     SpanIndexOf | Job-XRUCSY | .NET 7.0 |    net7.0 |  2048 |  29.66 us | 0.560 us | 0.575 us |  0.26 |    0.01 |     845 B |         - |          NA |
-    //|     SpanIndexOf | Job-IWVJPW | .NET 5.0 |    net5.0 |  2048 | 112.78 us | 1.757 us | 1.644 us |  1.00 |    0.00 |     268 B |         - |          NA |
-    //|     SpanIndexOf | Job-VTSQQJ | .NET 6.0 |    net6.0 |  2048 | 117.57 us | 1.186 us | 0.926 us |  1.05 |    0.01 |     268 B |         - |          NA |
-    //|                 |            |          |           |       |           |          |          |       |         |           |           |             |
-    //| SpanLastIndexOf | Job-XRUCSY | .NET 7.0 |    net7.0 |  2048 |  29.58 us | 0.213 us | 0.199 us |  0.61 |    0.00 |     832 B |         - |          NA |
-    //| SpanLastIndexOf | Job-IWVJPW | .NET 5.0 |    net5.0 |  2048 |  48.54 us | 0.168 us | 0.148 us |  1.00 |    0.00 |     268 B |         - |          NA |
-    //| SpanLastIndexOf | Job-VTSQQJ | .NET 6.0 |    net6.0 |  2048 |  50.59 us | 0.254 us | 0.212 us |  1.04 |    0.01 |     268 B |         - |          NA |
 }
+
+////IndeOfValueType源码:
+//internal static unsafe int IndexOfValueType<T>(ref T searchSpace, T value, int length) where T : struct, IEquatable<T>
+//{
+//    Debug.Assert(length >= 0);
+
+//    nint index = 0; // Use nint for arithmetic to avoid unnecessary 64->32->64 truncations
+//    if (Vector.IsHardwareAccelerated && Vector<T>.IsTypeSupported && (Vector<T>.Count * 2) <= length)
+//    {
+//        Vector<T> valueVector = new Vector<T>(value);
+//        Vector<T> compareVector = default;
+//        Vector<T> matchVector = default;
+//        if ((uint)length % (uint)Vector<T>.Count != 0)
+//        {
+//            // Number of elements is not a multiple of Vector<T>.Count, so do one
+//            // check and shift only enough for the remaining set to be a multiple
+//            // of Vector<T>.Count.
+//            compareVector = Unsafe.As<T, Vector<T>>(ref Unsafe.Add(ref searchSpace, index));
+//            matchVector = Vector.Equals(valueVector, compareVector);
+//            if (matchVector != Vector<T>.Zero)
+//            {
+//                goto VectorMatch;
+//            }
+//            index += length % Vector<T>.Count;
+//            length -= length % Vector<T>.Count;
+//        }
+//        while (length > 0)
+//        {
+//            compareVector = Unsafe.As<T, Vector<T>>(ref Unsafe.Add(ref searchSpace, index));
+//            matchVector = Vector.Equals(valueVector, compareVector);
+//            if (matchVector != Vector<T>.Zero)
+//            {
+//                goto VectorMatch;
+//            }
+//            index += Vector<T>.Count;
+//            length -= Vector<T>.Count;
+//        }
+//        goto NotFound;
+//    VectorMatch:
+//        for (int i = 0; i < Vector<T>.Count; i++)
+//            if (compareVector[i].Equals(value))
+//                return (int)(index + i);
+//    }
+
+//    while (length >= 8)
+//    {
+//        if (value.Equals(Unsafe.Add(ref searchSpace, index)))
+//            goto Found;
+//        if (value.Equals(Unsafe.Add(ref searchSpace, index + 1)))
+//            goto Found1;
+//        if (value.Equals(Unsafe.Add(ref searchSpace, index + 2)))
+//            goto Found2;
+//        if (value.Equals(Unsafe.Add(ref searchSpace, index + 3)))
+//            goto Found3;
+//        if (value.Equals(Unsafe.Add(ref searchSpace, index + 4)))
+//            goto Found4;
+//        if (value.Equals(Unsafe.Add(ref searchSpace, index + 5)))
+//            goto Found5;
+//        if (value.Equals(Unsafe.Add(ref searchSpace, index + 6)))
+//            goto Found6;
+//        if (value.Equals(Unsafe.Add(ref searchSpace, index + 7)))
+//            goto Found7;
+
+//        length -= 8;
+//        index += 8;
+//    }
+
+//    while (length >= 4)
+//    {
+//        if (value.Equals(Unsafe.Add(ref searchSpace, index)))
+//            goto Found;
+//        if (value.Equals(Unsafe.Add(ref searchSpace, index + 1)))
+//            goto Found1;
+//        if (value.Equals(Unsafe.Add(ref searchSpace, index + 2)))
+//            goto Found2;
+//        if (value.Equals(Unsafe.Add(ref searchSpace, index + 3)))
+//            goto Found3;
+
+//        length -= 4;
+//        index += 4;
+//    }
+
+//    while (length > 0)
+//    {
+//        if (value.Equals(Unsafe.Add(ref searchSpace, index)))
+//            goto Found;
+
+//        index += 1;
+//        length--;
+//    }
+//NotFound:
+//    return -1;
+
+//Found: // Workaround for https://github.com/dotnet/runtime/issues/8795
+//    return (int)index;
+//Found1:
+//    return (int)(index + 1);
+//Found2:
+//    return (int)(index + 2);
+//Found3:
+//    return (int)(index + 3);
+//Found4:
+//    return (int)(index + 4);
+//Found5:
+//    return (int)(index + 5);
+//Found6:
+//    return (int)(index + 6);
+//Found7:
+//    return (int)(index + 7);
+//}
+
+//BenchmarkDotNet = v0.13.1.1796 - nightly, OS = Microsoft Windows 10.0.22000 Microsoft Windows NT 10.0.22000.0
+//Intel Core i9-10900 CPU 2.50GHz, 1 CPU, 20 logical and 10 physical cores
+//.NET SDK=7.0.100-preview.4.22252.9
+//  [Host]     : .NET 6.0.5(6.0.522.21309), X64 RyuJIT
+//  Job-DEQWDN : .NET 7.0.0(7.0.22.22904), X64 RyuJIT
+//  Job-JXNRNG : .NET 6.0.5(6.0.522.21309), X64 RyuJIT
+
+
+//|          Method |        Job |  Runtime | Toolchain | Times |      Mean |     Error |    StdDev | Ratio    | Code Size  | Allocated | Alloc Ratio |
+//|---------------- |----------- |--------- |---------- |------ |----------:| ----------:| ----------:| ------:| ----------:| ----------:| ------------:|
+//| SpanIndexOf     |Job - DEQWDN| .NET 7.0 | net7.0    | 1024 | 7.945 us   | 0.0209 us | 0.0174 us   | 0.29   | 845 B      | - | NA |
+//| SpanIndexOf     |Job - JXNRNG| .NET 6.0 | net6.0    | 1024 | 27.764 us  | 0.0717 us | 0.0599 us   | 1.00   | 268 B      | - | NA |
+//|                 |            |          |           |            |           |           |             |         |            |           |             |
+//| SpanLastIndexOf |Job - DEQWDN| .NET 7.0 | net7.0    | 1024 | 7.944 us   | 0.0419 us | 0.0392 us   | 0.64   | 832 B      | - | NA |
+//| SpanLastIndexOf |Job - JXNRNG| .NET 6.0 | net6.0    | 1024 | 12.323 us  | 0.0187 us | 0.0156 us   | 1.00   | 268 B      | - | NA |
+//|                 |            |          |           |       |           |           |             |         |                |           |             |
+//| SpanIndexOf     |Job - DEQWDN| .NET 7.0 | net7.0    | 2048 | 16.271 us  | 0.0943 us | 0.0836 us   | 0.29   | 845 B      | - | NA |
+//| SpanIndexOf     |Job - JXNRNG| .NET 6.0 | net6.0    | 2048 | 56.439 us  | 0.1949 us | 0.1727 us   | 1.00   | 268 B      | - | NA |
+//|                 |            |          |           |       |           |           |             |         |                |           |             |
+//| SpanLastIndexOf |Job - DEQWDN| .NET 7.0 | net7.0    | 2048 | 15.856 us  | 0.0475 us | 0.0397 us   | 0.64   | 832 B      | - | NA |
+//| SpanLastIndexOf |Job - JXNRNG| .NET 6.0 | net6.0    | 2048 | 24.737 us  | 0.3226 us | 0.2694 us   | 1.00   | 268 B      | - | NA |
