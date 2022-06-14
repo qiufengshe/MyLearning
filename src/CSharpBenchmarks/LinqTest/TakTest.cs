@@ -44,7 +44,144 @@ namespace net6perf.LinqTest
     }
 }
 
+////Take源码
+//public static IEnumerable<TSource> Take<TSource>(this IEnumerable<TSource> source, int count)
+//{
+//    if (source == null)
+//    {
+//        ThrowHelper.ThrowArgumentNullException(ExceptionArgument.source);
+//    }
 
+//    return count <= 0 ?
+//        Empty<TSource>() :
+//        TakeIterator<TSource>(source, count);
+//}
+
+//private static IEnumerable<TSource> TakeIterator<TSource>(IEnumerable<TSource> source, int count)
+//{
+//    Debug.Assert(count > 0);
+
+//    foreach (TSource element in source)
+//    {
+//        yield return element;  //yield简化迭代器,具体可以使用ILSpy工具查看生成IL代码
+//        if (--count == 0) break;
+//    }
+//}
+
+////IL部分代码 MovNext
+//.method private final hidebysig newslot virtual
+//            instance bool MoveNext() cil managed
+//{
+//            .override method instance bool [System.Runtime]
+//    System.Collections.IEnumerator::MoveNext()
+//    // Method begins at RVA 0x27c8
+//    // Header size: 12
+//    // Code size: 168 (0xa8)
+//    .maxstack 3
+//    .locals init (
+//        [0] int32,
+//        [1] bool,
+//        [2] int32
+//    )
+
+//    IL_0000: ldarg.0
+//    IL_0001: ldfld int32 CharpLearning.Program / '<Test>d__1'::'<>1__state'
+//    IL_0006: stloc.0
+//    IL_0007: ldloc.0
+//    IL_0008: brfalse.s IL_0012
+
+//    IL_000a: br.s IL_000c
+
+//    IL_000c: ldloc.0
+//    IL_000d: ldc.i4.1
+//    IL_000e: beq.s IL_0014
+
+//    IL_0010: br.s IL_0016
+
+//    IL_0012: br.s IL_0018
+
+//    IL_0014: br.s IL_005f
+
+//    IL_0016: ldc.i4.0
+//    IL_0017: ret
+
+//    IL_0018: ldarg.0
+//    IL_0019: ldc.i4.m1
+//    IL_001a: stfld int32 CharpLearning.Program / '<Test>d__1'::'<>1__state'
+//    IL_001f: nop
+//    IL_0020: nop
+//    IL_0021: ldarg.0
+//    IL_0022: ldarg.0
+//    IL_0023: ldfld int32[] CharpLearning.Program / '<Test>d__1'::source
+//    IL_0028: stfld int32[] CharpLearning.Program / '<Test>d__1'::'<>s__1'
+//    IL_002d: ldarg.0
+//    IL_002e: ldc.i4.0
+//    IL_002f: stfld int32 CharpLearning.Program / '<Test>d__1'::'<>s__2'
+//    IL_0034: br.s IL_008f
+
+//    IL_0036: ldarg.0
+//    IL_0037: ldarg.0
+//    IL_0038: ldfld int32[] CharpLearning.Program / '<Test>d__1'::'<>s__1'
+//    IL_003d: ldarg.0
+//    IL_003e: ldfld int32 CharpLearning.Program / '<Test>d__1'::'<>s__2'
+//    IL_0043: ldelem.i4
+//    IL_0044: stfld int32 CharpLearning.Program / '<Test>d__1'::'<element>5__3'
+//    IL_0049: nop
+//    IL_004a: ldarg.0
+//    IL_004b: ldarg.0
+//    IL_004c: ldfld int32 CharpLearning.Program / '<Test>d__1'::'<element>5__3'
+//    IL_0051: stfld int32 CharpLearning.Program / '<Test>d__1'::'<>2__current'
+//    IL_0056: ldarg.0
+//    IL_0057: ldc.i4.1
+//    IL_0058: stfld int32 CharpLearning.Program / '<Test>d__1'::'<>1__state'
+//    IL_005d: ldc.i4.1
+//    IL_005e: ret
+
+//    IL_005f: ldarg.0
+//    IL_0060: ldc.i4.m1
+//    IL_0061: stfld int32 CharpLearning.Program / '<Test>d__1'::'<>1__state'
+//    IL_0066: ldarg.0
+//    IL_0067: ldfld int32 CharpLearning.Program / '<Test>d__1'::count
+//    IL_006c: ldc.i4.1
+//    IL_006d: sub
+//    IL_006e: stloc.2
+//    IL_006f: ldarg.0
+//    IL_0070: ldloc.2
+//    IL_0071: stfld int32 CharpLearning.Program / '<Test>d__1'::count
+//    IL_0076: ldloc.2
+//    IL_0077: ldc.i4.0
+//    IL_0078: ceq
+//    IL_007a: stloc.1
+//    IL_007b: ldloc.1
+//    IL_007c: brfalse.s IL_0080
+
+//    IL_007e: br.s IL_009f
+
+//    IL_0080: nop
+//    IL_0081: ldarg.0
+//    IL_0082: ldarg.0
+//    IL_0083: ldfld int32 CharpLearning.Program / '<Test>d__1'::'<>s__2'
+//    IL_0088: ldc.i4.1
+//    IL_0089: add
+//    IL_008a: stfld int32 CharpLearning.Program / '<Test>d__1'::'<>s__2'
+
+//    IL_008f: ldarg.0
+//    IL_0090: ldfld int32 CharpLearning.Program / '<Test>d__1'::'<>s__2'
+//    IL_0095: ldarg.0
+//    IL_0096: ldfld int32[] CharpLearning.Program / '<Test>d__1'::'<>s__1'
+//    IL_009b: ldlen
+//    IL_009c: conv.i4
+//    IL_009d: blt.s IL_0036
+
+//    IL_009f: ldarg.0
+//    IL_00a0: ldnull
+//    IL_00a1: stfld int32[] CharpLearning.Program / '<Test>d__1'::'<>s__1'
+//    IL_00a6: ldc.i4.0
+//    IL_00a7: ret
+//}
+
+
+////性能测试
 //| Method |        Job |  Runtime | Toolchain | Times |         Mean |       Error |       StdDev | Ratio | RatioSD | Code Size |   Gen 0 | Allocated | Alloc Ratio |
 //|------- |----------- |--------- |---------- |------ |-------------:|------------:|-------------:|------:|--------:|----------:|--------:|----------:|------------:|
 //|   Take | Job-ZJKRIV | .NET 7.0 |    net7.0 |  1024 |  66,691.3 ns |   247.98 ns |    207.08 ns |  0.74 |    0.02 |     623 B | 31.2500 |   98304 B |        1.00 |
