@@ -39,5 +39,28 @@ namespace CSharpBenchmarks.StringTest
                 }
             }
         }
+
+        public void OkTest()
+        {
+            //以往这样写的代码
+            if (value[0] == Chars)
+            {
+
+            }
+            if (value[value.Length - 1] == Chars)
+            {
+
+            }
+
+            //⬇⬇都可以分别有StartsWith和EndsWith
+            if (value.StartsWith(Chars))
+            {
+
+            }
+            if (value.EndsWith(Chars))
+            {
+
+            }
+        }
     }
 }
