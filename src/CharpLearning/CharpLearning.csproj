@@ -9,4 +9,10 @@
 		<LangVersion>preview</LangVersion>
 	</PropertyGroup>
 
+	<ItemGroup>
+	  <Reference Include="System.Drawing.Common">
+	    <HintPath>..\..\..\runtime\artifacts\bin\System.Drawing.Common\Debug\net7.0-windows\System.Drawing.Common.dll</HintPath>
+	  </Reference>
+	</ItemGroup>
+
 </Project>

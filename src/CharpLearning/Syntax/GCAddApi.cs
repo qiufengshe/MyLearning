@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Runtime.CompilerServices;
 
 namespace CharpLearning.Syntax
 {
@@ -112,5 +111,36 @@ namespace CharpLearning.Syntax
             Console.WriteLine(currentThreadAllocateBytes);
         }
 
+        /// <summary>
+        /// GC 新增API GetConfigurationVariables
+        /// </summary>
+        public void GetConfigurationVariables()
+        {
+            var map = GC.GetConfigurationVariables();
+            foreach (var item in map)
+            {
+                Console.WriteLine($"{item.Key}  value={item.Value}");
+            }
+
+            //ServerGC value = False
+            //ConcurrentGC value = True
+            //RetainVM value = False
+            //NoAffinitize value = False
+            //GCCpuGroup value = False
+            //GCLargePages value = False
+            //HeapCount value = 1
+            //GCHeapAffinitizeMask value = 0
+            //GCHeapAffinitizeRanges value =
+            //GCHighMemPercent  value = 0
+            //GCHeapHardLimit value = 0
+            //GCHeapHardLimitPercent value = 0
+            //GCHeapHardLimitSOH value = 0
+            //GCHeapHardLimitLOH value = 0
+            //GCHeapHardLimitPOH value = 0
+            //GCHeapHardLimitSOHPercent value = 0
+            //GCHeapHardLimitLOHPercent value = 0
+            //GCHeapHardLimitPOHPercent value = 0
+            //GCConserveMem value = 0                
+        }
     }
 }
