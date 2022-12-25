@@ -1,10 +1,10 @@
-﻿﻿﻿﻿﻿﻿﻿﻿## .Net 7性能改进-前﻿
+﻿﻿﻿## .Net 7性能改进
 
 #### 前言
 
 这是一篇 [Performance Improvements in .NET 7](https://devblogs.microsoft.com/dotnet/performance_improvements_in_net_7/) 的翻译,原文比较长,PDF文件有232页,所以进行了拆分,每天翻译一部分.下面便开始正文:
 
-一年前,我(Stephen Toub)写了 [.Net 6性能改进](https://devblogs.microsoft.com/dotnet/performance-improvements-in-net-6) 这篇文章,类似的还有 [.NET Core 2.0](https://devblogs.microsoft.com/dotnet/performance-improvements-in-net-core) 和 [.NET Core 2.1](https://devblogs.microsoft.com/dotnet/performance-improvements-in-net-core-2-1) 及 [.NET Core 3.0](https://devblogs.microsoft.com/dotnet/performance-improvements-in-net-core-3-0) /[.NET 5](https://devblogs.microsoft.com/dotnet/performance_improvements_in_net_7/) ,我喜欢写这些文章,喜欢阅读开发人员对它们的回应.特别是去年的一条评论引起了我的共鸣.该评论引用了《 Die Hard》中的一句话:"当亚历山大看到他的领土辽阔时,他为没有更多的世界需要征服而哭泣",并质疑.NET的性能改进是否类似.没有更多的“性能”世界需要征服吗?我有点头晕目眩地说,即使.NET6很快, .NET7明确地强调了我们还可以做得更多，并且已经做得更多。
+一年前,我(Stephen Toub)写了 [.Net 6性能改进](https://devblogs.microsoft.com/dotnet/performance-improvements-in-net-6) 这篇文章,类似的还有 [.NET Core 2.0](https://devblogs.microsoft.com/dotnet/performance-improvements-in-net-core) 和 [.NET Core 2.1](https://devblogs.microsoft.com/dotnet/performance-improvements-in-net-core-2-1) 及 [.NET Core 3.0](https://devblogs.microsoft.com/dotnet/performance-improvements-in-net-core-3-0) /[.NET 5](https://devblogs.microsoft.com/dotnet/performance_improvements_in_net_7/) ,我喜欢写这些文章,喜欢阅读开发人员对它们的回应.特别是去年的一条评论引起了我的共鸣.该评论引用了《 Die Hard》中的一句话:"当亚历山大看到他的领土辽阔时,他为没有更多的世界需要征服而哭泣",并质疑.NET的性能改进是否类似.没有更多的“性能”世界需要征服吗?我有点头晕目眩地说,即使.NET6很快, .NET7明确地强调了我们还可以做得更多，并且已经做得更多.
 
 与之前版本的.NET一样,性能是贯穿整个技术栈的一个关键焦点,性能是贯穿整个栈的关键焦点,无论是为性能而明确创建的特性,还是在设计和实现时仍然牢记性能的与性能无关的特性.现在,一个.NET7发行版的候选版本即将到来,这是讨论它的好时机.
 
@@ -118,7 +118,7 @@ dotnet run -c Release -f net6.0 --filter '*方法名*' --runtimes net6.0 net7.0
 
 我想首先讨论一下即时编译器(JIT)中的性能改进,讨论的内容本身并不是性能改进.在低层、性能敏感的代码时,能够准确理解JIT生成的汇编代码是至关重要的.有多种方法可以获取该汇编代码.在线工具sharplab.io对此非常有用(感谢@ashmind提供此工具);然而,它目前只针对单个版本，因此在编写本文时，我只能看到.NET6的输出,这使得很难将其用于A/B多版本测试.godbolt.org在这方面也很有价值,在@hez2010在compiler-explorer/compiler-explorer#3168中添加了C#支持,具有类似单个版本的限制.最灵活的解决方案涉及在本地获取该程序集代码,因为它可以将您所需的任何版本或本地构建与所需的配置和开关集进行比较.
 
-一种常见的方法是在benchmarkdotnet中使用[DisassemblyDiagnoser]特性。只需将[DisassemblyDiagnosis]特性添加到测试类中,benchmarkdotnet将查找为测试生成的汇编代码以及它们调用的函数的深度,并以人类可读的形式转储找到的汇编代码.例如,如果我运行此测试:
+一种常见的方法是在benchmarkdotnet中使用[DisassemblyDiagnoser]特性.只需将[DisassemblyDiagnosis]特性添加到测试类中,benchmarkdotnet将查找为测试生成的汇编代码以及它们调用的函数的深度,并以人类可读的形式转储找到的汇编代码.例如,如果我运行此测试:
 
 ```csharp
 using BenchmarkDotNet.Attributes;
@@ -163,7 +163,7 @@ M00_L01:
 
 生成的汇编代码格式相当整洁.这种支持最近在dotnet/benchmarkdotnet#2072中得到了进一步改进,它允许在命令行上向benchmarkdotnet传递一个过滤器列表,以准确地告诉它应该转储哪些方法的汇编代码.
 
-如果您可以获得.NET运行时的“调试”或“检查”版本("检查"是启用了优化但仍包含断言的版本),尤其是clrjit,另一种有价值的方法是设置一个环境变量,该环境变量使JIT本身对其发出的所有汇编代码进行可读的描述.这可以用于任何类型的应用程序,因为它是JIT本身的一部分,而不是任何特定工具或其他环境的一部分.它支持显示JIT每次生成代码时生成的代码(例如,如果它首先编译一个没有优化的方法,然后用优化重新编译),总的来说,这是汇编代码最准确的图片.当然,最大的缺点是它需要非发布版本的运行时,这通常意味着您需要从dotnet/runtime repo中的源代码自己构建。
+如果您可以获得.NET运行时的“调试”或“检查”版本("检查"是启用了优化但仍包含断言的版本),尤其是clrjit,另一种有价值的方法是设置一个环境变量,该环境变量使JIT本身对其发出的所有汇编代码进行可读的描述.这可以用于任何类型的应用程序,因为它是JIT本身的一部分,而不是任何特定工具或其他环境的一部分.它支持显示JIT每次生成代码时生成的代码(例如,如果它首先编译一个没有优化的方法,然后用优化重新编译),总的来说,这是汇编代码最准确的图片.当然,最大的缺点是它需要非发布版本的运行时,这通常意味着您需要从dotnet/runtime repo中的源代码自己构建.
 
 直到.NET 7,也就是说,从dotnet/runtime#73365开始,这个程序集转储支持现在也可以在发布版本中使用,这意味着它只是.NET7的一部分,您不需要任何特殊的东西来使用它.要了解这一点,请尝试创建一个简单的“hello world”应用程序,如:
 
@@ -234,7 +234,7 @@ Hello, world!
 
 这对于性能分析和调优非常有帮助,甚至对于像“我的函数是否内联”或“我期望优化的代码是否真的被优化掉了”这样简单的问题也是如此.在这篇文章的其余部分，我将包括由这两种机制之一生成的汇编代码片段,以帮助举例说明概念.
 
-请注意,有时在确定指定什么名称作为DOTNET_JitDisasm的值时可能会有点混乱，特别是当您所关心的方法是C#编译器名称或名称混乱的方法时(因为JIT只看到IL和元数据，而不是原始的C#代码)例如,具有顶级语句的程序的入口点方法的名称、本地函数的名称等.为了帮助实现这一点，并提供JIT正在进行的工作的真正有价值的顶层视图，.NET 7还支持新的DOTNET_JitDisasmSummary 环境变量(在DOTNET/runtime#74090中引入).将其设置为“1”,它将导致JIT在每次编译方法时都发出一行,包括该方法的名称,该名称可使用DOTNET_JitDisasm复制/粘贴。但是，这个特性本身很有用，因为它可以快速地为您突出显示正在编译什么、何时编译以及使用什么设置。例如，如果我设置环境变量，然后运行“hello，world”控制台应用程序，会得到以下输出(7.0.100-rc.2.22457.11之前的版本,开启DOTNET_JitDisasmSummary=是不会出现下面输出的,7.0.100-rc.2.22457.11输出的信息更丰富)：
+请注意,有时在确定指定什么名称作为DOTNET_JitDisasm的值时可能会有点混乱，特别是当您所关心的方法是C#编译器名称或名称混乱的方法时(因为JIT只看到IL和元数据，而不是原始的C#代码)例如,具有顶级语句的程序的入口点方法的名称、本地函数的名称等.为了帮助实现这一点，并提供JIT正在进行的工作的真正有价值的顶层视图，.NET 7还支持新的DOTNET_JitDisasmSummary 环境变量(在DOTNET/runtime#74090中引入).将其设置为“1”,它将导致JIT在每次编译方法时都发出一行,包括该方法的名称,该名称可使用DOTNET_JitDisasm复制/粘贴.但是，这个特性本身很有用，因为它可以快速地为您突出显示正在编译什么、何时编译以及使用什么设置.例如，如果我设置环境变量，然后运行“hello，world”控制台应用程序，会得到以下输出(7.0.100-rc.2.22457.11之前的版本,开启DOTNET_JitDisasmSummary=是不会出现下面输出的,7.0.100-rc.2.22457.11输出的信息更丰富)：
 
 ```csharp
    1: JIT compiled CastHelpers:StelemRef(Array,long,Object) [Tier1, IL size=88, code size=93]
@@ -2481,7 +2481,7 @@ C#编译器将为这些方法生成IL代码,如下所示:
 }
 ```
 
-您可以看到,C#编译器已经计算出了<font color=red> 3 +(4**5)</font>的值,因为方法A的IL包含了等价的<font color=red> return 23</font>;但是,方法<font color=red> B</font>包含等价的<font color=red> return A()* 2</font>; ,强调C#编译器执行的常量折叠只是在方法内部.下面是JIT生成的结果:
+您可以看到,C#编译器已经计算出了<font color=red>3 +(4**5)</font>的值,因为方法A的IL包含了等价的<font color=red>return 23</font>;但是,方法<font color=red> B</font>包含等价的<font color=red> return A()* 2</font>; ,强调C#编译器执行的常量折叠只是在方法内部.下面是JIT生成的结果:
 
 ```assembly
 ; Program.A()
@@ -2599,7 +2599,7 @@ private static int Value => 16;
 private static int SomethingElse() => 42;
 ```
 
-如果我们看一下在.Net 6上为Compute1生成的汇编代码,它看起来就像我们所希望的那样。我们把Valuae相加了5次, Value被简单地内联并返回一个常量16,所以我们希望为Compute1生成的汇编代码能够有效地返回值80(十六进制0x50),这正是所发生的:
+如果我们看一下在.Net 6上为Compute1生成的汇编代码,它看起来就像我们所希望的那样.我们把Valuae相加了5次, Value被简单地内联并返回一个常量16,所以我们希望为Compute1生成的汇编代码能够有效地返回值80(十六进制0x50),这正是所发生的:
 
 ```assembly
 ; Program.Compute1()
@@ -2628,7 +2628,7 @@ private static int SomethingElse() => 42;
 
 事实证明,JIT的许多优化操作的是作为解析IL的一部分创建的树数据结构.在某些情况下,当它们所操作的树更大,包含更多要分析的内容时,优化可以做得更好.但是,各种操作可以将这些树分解为更小的、单独的树,例如使用作为内联一部分创建的临时变量,这样做可以抑制这些操作.为了有效地将这些树组合一起,需要一些东西,那就是正向替换.你可以把正向替换想象成逆向的CSE(公共表达式消除);与尝试查找重复表达式并通过一次计算值并将其存储到临时值中来消除它们不同,正向替换消除了临时值,并有效地将表达式树移动到它的使用站点.显然,如果这样做会否定CSE并导致重复的工作,您就不希望这样做,但是对于只定义一次并使用一次的表达式,这种向前传播是有价值的.
 
-dotnet /runtime#61023添加了一个初始的有限版本的前向替换,然后dotnet /runtime#63720添加了一个更健壮的通用实现.随后,dotnet/runtime#70587对其进行了扩展,使其也涵盖了一些SIMD向量,然后dotnet/runtime#71161对其进行了进一步改进,以支持替换到更多的位置(在本例中为调用实参).有了这些,我们愚蠢的基准测试现在在.Net 7上生成了以下代码:
+dotnet /runtime#61023添加了一个初始的有限版本的前向替换,然后dotnet /runtime#63720添加了一个更健壮的通用实现.随后,dotnet/runtime#70587对其进行了扩展,使其也涵盖了一些SIMD向量,然后dotnet/runtime#71161对其进行了进一步改进,以支持替换到更多的位置(在本例中为调用实参).有了这些,我们的基准测试现在在.Net 7上生成了以下代码:
 
 ```assembly
 ; Program.Compute2()
@@ -2647,3 +2647,145 @@ SIMD(即单指令多数据),是一种一条指令同时应用于多条数据的�
 .NET长期以来一直支持Vector<T>形式的向量,这是一种易于使用的类型,JIT可以很好的支持,使开发人员能够编写向量的实现.Vector<T>最大的优点之一也是最大的缺点之一.该类型旨在适应硬件中可用的任何宽度向量指令.如果机器支持256位宽度向量,那很好,这就是Vector<T>的目标.如果不是,如果机器支持128位宽度向量,那就很好,这就是Vector<T>的目标.但这种灵活性有各种各样的缺点,至少在今天是这样；例如,您可以对Vector<T>执行的操作最终需要与所用向量的宽度无关,因为宽度是根据代码实际运行的硬件而变化的.这意味着可以在Vector<T>上公开的操作是有限的,这反过来又限制了可以用它向量的操作种类.此外,因为在给定的进程中,它只有一个大小,所以一些介于128位到256位之间的数据集大小可能不会像您希望的那样得到处理.您编写了基于Vector<byte>的算法,并在支持256位向量的机器上运行它,这意味着它一次可以处理32个字节,但您可以向它输入31个字节.如果Vector<T>映射到128位向量,它本来可以用于改进该输入的处理,但由于其向量大小大于输入数据大小,实现最终会回落到未加速的向量.还有一些与R2R和Native AOT相关的问题,因为提前编译需要提前知道Vector<T>操作应该使用哪些指令.您在前面讨论DOTNET_JitDisasmSummary；的输出时已经看到了这一点；我们看到,NarrowUtf16ToAscii方法是在“hello,world”控制台应用程序中JIT编译的少数方法之一,这是因为它使用Vector<T>而缺少R2R代码.
 
 从.NET Core 3.0开始, .NET获得了数以千计的新“硬件指令”方法,其中大多数是映射到这些SIMD指令之一的.NET API.这些内部函数使专家能够编写针对特定指令集的实现,如果做得好,则可以获得最佳性能,但它还要求开发人员了解每个指令集,并为可能相关的每个指令集实现其算法,例如,支持AVX2实现的话,支持SSE2实现的时候,或ArmBase实现(如果支持),依此类推. 在.Net 8中Vector开始支持AVX512指令.
+
+.Net7引入了一个中间形式.之前版本引入了Vector128<T>和Vector256<T>类型,但纯粹是作为数据进出硬件intrinsic的载体,因为它们都与特定的宽度向量相关联.现在在.Net 7中,通过dotnet/runtime#53450、dotnet/runtime#63414、dotnet/runtime#60094和dotnet/runtime#68559公开,在这些类型上也定义了一组非常大的跨平台操作,例如Vector128<T>。ExtractMostSignificantBits Vector256。ConditionalSelect等等.希望或需要超越高级Vector<T>所提供内容的开发人员可以选择以这两种类型中的一种或多种为目标.通常情况下,这相当于开发人员基于Vector128<T>编写一条代码路径,因为这具有最广泛的覆盖范围,并从矢量化中获得大量收益,然后如果有动机这样做,可以为Vector256<T>添加第二条路径,以便在拥有256位宽度向量的平台上进一步提高吞吐量.可以将这些类型和方法看作平台抽象层:您对这些方法进行编码,然后JIT将它们转换为底层平台的最合适的指令.考虑以下简单代码作为示例:
+
+```csharp
+using System.Runtime.CompilerServices;
+using System.Runtime.Intrinsics;
+using System.Runtime.Intrinsics.X86;
+
+internal class Program
+{
+    private static void Main()
+    {
+        Vector128<byte> v = Vector128.Create((byte)123);
+        while (true)
+        {
+            WithIntrinsics(v);
+            WithVector(v);
+        }
+    }
+
+    [MethodImpl(MethodImplOptions.NoInlining)]
+    private static int WithIntrinsics(Vector128<byte> v) => Sse2.MoveMask(v);
+
+    [MethodImpl(MethodImplOptions.NoInlining)]
+    private static uint WithVector(Vector128<byte> v) => v.ExtractMostSignificantBits();
+}
+```
+
+我有两个函数:一个直接使用Sse2. 一个使用新的Vector128<T>.ExtractMostSignificantBits方法.使用DOTNET_JitDisasm =Program.*,以下是这些优化的第一级代码看起来像我的x64 Windows机器:
+
+```assembly
+; Assembly listing for method Program:WithIntrinsics(Vector128`1):int
+G_M000_IG01:                ;; offset=0000H
+       C5F877               vzeroupper
+
+G_M000_IG02:                ;; offset=0003H
+       C5F91001             vmovupd  xmm0, xmmword ptr [rcx]
+       C5F9D7C0             vpmovmskb eax, xmm0
+
+G_M000_IG03:                ;; offset=000BH
+       C3                   ret
+
+; Total bytes of code 12
+
+; Assembly listing for method Program:WithVector(Vector128`1):int
+G_M000_IG01:                ;; offset=0000H
+       C5F877               vzeroupper
+
+G_M000_IG02:                ;; offset=0003H
+       C5F91001             vmovupd  xmm0, xmmword ptr [rcx]
+       C5F9D7C0             vpmovmskb eax, xmm0
+
+G_M000_IG03:                ;; offset=000BH
+       C3                   ret
+
+; Total bytes of code 12
+```
+
+注意到什么了吗? 这两种方法的代码是相同的,都会产生vpmovmskb(移动字节掩码)指令.然而,前一种代码只能在支持SSE2的平台上工作,而后一种代码可以在任何支持128位矢量的平台上运行,包括Arm64和WASM(以及任何未来的板载平台,也支持SIMD);这只会导致在这些平台上生成不同的指令.
+
+为了更深入地研究这个问题,让我们举一个简单的例子并向量化它.我们将实现一个Contains方法,在这个方法中,我们希望在一段字节范围内搜索特定的值并返回是否找到它:
+
+```csharp
+static bool Contains(ReadOnlySpan<byte> haystack, byte needle)
+{
+    for (int i = 0; i < haystack.Length; i++)
+    {
+        if (haystack[i] == needle)
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+```
+
+我们如何用向量<T>向量化它?首先,我们需要检查它是否被支持,如果不支持,就退回到我们现有的实现(Vector.IsHardwareAccelerated).如果输入的长度小于向量的大小(Vector <byte>.Count),我们还需要返回.
+
+```csharp
+static bool Contains(ReadOnlySpan<byte> haystack, byte needle)
+{
+    if (Vector.IsHardwareAccelerated && haystack.Length >= Vector<byte>.Count)
+    {
+        // ...
+    }
+    else
+    {
+        for (int i = 0; i < haystack.Length; i++)
+        {
+            if (haystack[i] == needle)
+            {
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+```
+
+现在我们知道我们有足够的数据.我们可以开始编码我们的向量化循环.在这个循环中.我们将搜索needle.这意味着我们需要一个包含每个元素的值的向量;Vector<T>的构造函数提供了(new Vector<byte>(needle)).我们需要能够一次切下矢量的数据宽度;为了提高效率.我将使用指针.我们需要一个当前迭代指针.我们需要迭代到不能形成另一个向量的位置因为我们太接近终点了.一个直接的方法是得到一个指针距离终点刚好一个向量的宽度;这样.我们就可以迭代.直到当前指针等于或大于那个阈值.最后.在循环体中.我们需要比较当前向量和目标向量.看看是否有相同的元素(Vector. EqualsAny).如果any返回true.如果没有将当前指针移到下一个位置.现在我们有:
+
+```csharp
+static unsafe bool Contains(ReadOnlySpan<byte> haystack, byte needle)
+{
+    if (Vector.IsHardwareAccelerated && haystack.Length >= Vector<byte>.Count)
+    {
+        fixed (byte* haystackPtr = &MemoryMarshal.GetReference(haystack))
+        {
+            Vector<byte> target = new Vector<byte>(needle);
+            byte* current = haystackPtr;
+            byte* endMinusOneVector = haystackPtr + haystack.Length - Vector<byte>.Count;
+            do
+            {
+                if (Vector.EqualsAny(target, *(Vector<byte>*)current))
+                {
+                    return true;
+                }
+
+                current += Vector<byte>.Count;
+            }
+            while (current < endMinusOneVector);
+
+            // ...
+        }
+    }
+    else
+    {
+        for (int i = 0; i < haystack.Length; i++)
+        {
+            if (haystack[i] == needle)
+            {
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+```
+
