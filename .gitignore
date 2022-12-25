@@ -368,3 +368,4 @@ FodyWeavers.xsd
 
 # PGO Local Test Copy
 artifacts_server/
+/src/CharpLearning/bin/Relase/net7.0

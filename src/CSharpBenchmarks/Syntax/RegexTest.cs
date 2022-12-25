@@ -12,7 +12,7 @@ namespace CSharpBenchmarks.Syntax
         public int Count { get; set; }
 
         [Params("qwe", "abc", "xyz")]
-        public string? Input { get; set; }
+        public string Input { get; set; }
 
         public Regex regex = new Regex(@"abc|def", RegexOptions.IgnoreCase);
 
@@ -50,6 +50,6 @@ namespace CSharpBenchmarks.Syntax
                 }
             }
         }
-    } 
+    }
 #endif
 }

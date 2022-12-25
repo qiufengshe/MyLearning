@@ -199,3 +199,119 @@ namespace net6perf.LinqTest
 //| AsSpan | Job-LEKBGG | .NET 5.0 |    net5.0 |  2048 |   1,676.9 ns |     4.84 ns |      4.04 ns |  1.00 |    0.00 |      68 B |       - |         - |          NA |
 //| AsSpan | Job-GWPOIS | .NET 6.0 |    net6.0 |  2048 |   1,678.5 ns |     8.91 ns |      8.34 ns |  1.00 |    0.01 |      68 B |       - |         - |          NA |
 //| AsSpan | Job-ZJKRIV | .NET 7.0 |    net7.0 |  2048 |   2,493.8 ns |    11.53 ns |     10.78 ns |  1.49 |    0.01 |      58 B |       - |         - |          NA |
+
+
+//; net6perf.LinqTest.TakTest.Take()
+//; int sum = 0;
+//; ^^^^^^^^^^^^
+//; for (int i = 0; i < Times; i++)
+//    ; ^^^^^^^^^
+//    ; var array = bytes.Take(5).ToArray();
+//; ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+//; sum += array.Length;
+//; ^^^^^^^^^^^^^^^^^^^^
+//; return sum;
+//; ^^^^^^^^^^^push      r14
+//             push      rdi
+//       push      rsi
+//       push      rbp
+//       push      rbx
+//       sub       rsp,20
+//       mov       rsi, rcx
+//       xor       edi, edi
+//       xor       ebx, ebx
+//       cmp       dword ptr [rsi+10],0
+//       jle near ptr M00_L03
+//M00_L00:
+//       mov rbp,[rsi + 8]
+//       test      rbp, rbp
+//       je        near ptr M00_L04
+//       mov       rdx, rbp
+//       mov       rcx, offset MT_System.Linq.IPartition`1[[System.Int32, System.Private.CoreLib]]
+//; 调用IsInstanceOfInterface方法
+//       call qword ptr [System.Runtime.CompilerServices.CastHelpers.IsInstanceOfInterface(Void *, System.Object)]
+//test rax, rax
+//       jne       short M00_L01
+//       mov       rcx, offset MT_System.Linq.Enumerable+ListPartition`1[[System.Int32, System.Private.CoreLib]]
+//       call CORINFO_HELP_NEWSFAST
+//       mov       r14, rax
+//       call      CORINFO_HELP_GETCURRENTMANAGEDTHREADID
+//       mov       [r14+8],eax
+//       lea       rcx,[r14 + 18]
+//       mov       rdx, rbp
+//       call      CORINFO_HELP_ASSIGN_REF
+//       xor       ecx, ecx
+//       mov       [r14+14],ecx
+//       mov       dword ptr [r14+20],4
+//       jmp short M00_L02
+//M00_L01:
+//       mov rcx, rax
+//       mov       r11,7FFE65150440
+//       mov       edx,5
+//       call      qword ptr [r11]
+//mov r14, rax
+//M00_L02:
+//       mov rcx, r14
+//       call      qword ptr [System.Linq.Enumerable.ToArray[[System.Int32, System.Private.CoreLib]](System.Collections.Generic.IEnumerable`1 < Int32 >)]
+//       add edi,[rax + 8]
+//       inc       ebx
+//       cmp       ebx,[rsi + 10]
+//       jl        near ptr M00_L00
+//M00_L03:
+//       mov eax, edi
+//       add       rsp,20
+//       pop       rbx
+//       pop       rbp
+//       pop       rsi
+//       pop       rdi
+//       pop       r14
+//       ret
+//M00_L04:
+//       mov ecx,10
+//       call      qword ptr [7FFE65535780]
+//int 3
+//; Total bytes of code 191
+
+
+//; System.Runtime.CompilerServices.CastHelpers.IsInstanceOfInterface(Void *, System.Object)
+//       test rdx, rdx
+//       je        short M01_L03
+//       mov       rax,[rdx]
+//       movzx     r8d, word ptr [rax+0E]
+//test r8, r8
+//       je        short M01_L02
+//       mov       r9,[rax + 38]
+//       cmp       r8,4
+//       jl        short M01_L01
+//M01_L00:
+//       cmp[r9],rcx
+//       je        short M01_L03
+//       cmp       [r9+8],rcx
+//       je        short M01_L03
+//       cmp       [r9+10],rcx
+//       je        short M01_L03
+//       cmp       [r9+18],rcx
+//       je        short M01_L03
+//       add       r9,20
+//       add       r8,0FFFFFFFFFFFFFFFC
+//       cmp       r8,4
+//       jge       short M01_L00
+//       test      r8, r8
+//       je        short M01_L02
+//M01_L01:
+//       cmp[r9],rcx
+//       je        short M01_L03
+//       add       r9,8
+//       dec       r8
+//       test      r8, r8
+//       jg        short M01_L01
+//M01_L02:
+//       test dword ptr [rax],406C0000
+//       jne       short M01_L04
+//       xor       edx, edx
+//M01_L03:
+//       mov rax, rdx
+//       ret
+//M01_L04:
+//       jmp qword ptr [System.Runtime.CompilerServices.CastHelpers.IsInstance_Helper(Void *, System.Object)]
+//; Total bytes of code 107
