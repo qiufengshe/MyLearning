@@ -18,7 +18,7 @@ namespace CSharpBenchmarks.Syntax
 
         //在.Net 7加入 正则表达式代码生成,简单不单独说明怎么使用
         //1. 使用RegexGenerator特性
-        [RegexGenerator(@"abc|def", RegexOptions.IgnoreCase)]
+        [GeneratedRegex(@"abc|def", RegexOptions.IgnoreCase)]
 
         //2. 使用static和partial进行声明
         public static partial Regex MyRegex();
