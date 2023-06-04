@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Management;
 using System.Runtime.CompilerServices;
@@ -13,9 +14,11 @@ namespace CSharpBenchmarks.LinqTest
     {
 
         public static Person[] arr;
+        //public TimeProvider timeProvider;
 
         static ForTest()
         {
+            Stopwatch.GetTimestamp();
             arr = Enumerable.Range(0, 10).Select(x => new Person("h" + x)).ToArray();
         }
 

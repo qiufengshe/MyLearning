@@ -45,7 +45,7 @@
 //            if (Avx2.IsSupported && (nuint)Vector256<int>.Count * 2 <= length)
 //            {
 //                nuint numElements = (nuint)Vector256<int>.Count;
-//                nuint numIters = (length / numElements) / 2;
+//                nuint numIters = length / numElements / 2;
 //                Vector256<int> reverseMask = Vector256.Create(7, 6, 5, 4, 3, 2, 1, 0);
 //                for (nuint i = 0; i < numIters; i++)
 //                {
@@ -77,7 +77,7 @@
 //            else if (Sse2.IsSupported && (nuint)Vector128<int>.Count * 2 <= length)
 //            {
 //                nuint numElements = (nuint)Vector128<int>.Count;
-//                nuint numIters = (length / numElements) / 2;
+//                nuint numIters = length / numElements / 2;
 //                for (nuint i = 0; i < numIters; i++)
 //                {
 //                    nuint firstOffset = i * numElements;
@@ -141,47 +141,47 @@
 //    }
 //}
 
-//namespace System.Runtime.Intrinsics
-//{
-//    public static class Vector2561
-//    {
-//        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-//        public static void StoreUnsafe<T>(this Vector256<T> source, ref T destination, nuint elementOffset)
-//            where T : struct
-//        {
-//            destination = ref Unsafe.Add(ref destination, (nint)elementOffset);
-//            Unsafe.WriteUnaligned(ref Unsafe.As<T, byte>(ref destination), source);
-//        }
+////namespace System.Runtime.Intrinsics
+////{
+////    public static class Vector2561
+////    {
+////        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+////        public static void StoreUnsafe<T>(this Vector256<T> source, ref T destination, nuint elementOffset)
+////            where T : struct
+////        {
+////            destination = ref Unsafe.Add(ref destination, (nint)elementOffset);
+////            Unsafe.WriteUnaligned(ref Unsafe.As<T, byte>(ref destination), source);
+////        }
 
-//        public static void StoreUnsafe<T>(this Vector128<T> source, ref T destination, nuint elementOffset)
-//          where T : struct
-//        {
-//            //ThrowHelper.ThrowForUnsupportedIntrinsicsVector128BaseType<T>();
-//            destination = ref Unsafe.Add(ref destination, (nint)elementOffset);
-//            Unsafe.WriteUnaligned(ref Unsafe.As<T, byte>(ref destination), source);
-//        }
-//    }
-//}
+////        public static void StoreUnsafe<T>(this Vector128<T> source, ref T destination, nuint elementOffset)
+////          where T : struct
+////        {
+////            //ThrowHelper.ThrowForUnsupportedIntrinsicsVector128BaseType<T>();
+////            destination = ref Unsafe.Add(ref destination, (nint)elementOffset);
+////            Unsafe.WriteUnaligned(ref Unsafe.As<T, byte>(ref destination), source);
+////        }
+////    }
+////}
 
-//namespace System.Runtime.CompilerServices
-//{
-//    public static unsafe partial class Unsafe
-//    {
-//        public static ref T Add<T>(ref T source, IntPtr elementOffset)
-//        {
-//#if CORECLR
-//            typeof(T).ToString(); // Type token used by the actual method body
-//            throw new PlatformNotSupportedException();
-//#else
-//            return ref AddByteOffset(ref source, (IntPtr)((nint)elementOffset * (nint)SizeOf<T>()));
-//#endif
+////namespace System.Runtime.CompilerServices
+////{
+////    public static unsafe partial class Unsafe
+////    {
+////        public static ref T Add<T>(ref T source, IntPtr elementOffset)
+////        {
+////#if CORECLR
+////            typeof(T).ToString(); // Type token used by the actual method body
+////            throw new PlatformNotSupportedException();
+////#else
+////            return ref AddByteOffset(ref source, (IntPtr)(elementOffset * (nint)SizeOf<T>()));
+////#endif
 
-//            // ldarg .0
-//            // ldarg .1
-//            // sizeof !!T
-//            // mul
-//            // add
-//            // ret
-//        }
-//    }
-//}
+////            // ldarg .0
+////            // ldarg .1
+////            // sizeof !!T
+////            // mul
+////            // add
+////            // ret
+////        }
+////    }
+////}

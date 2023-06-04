@@ -7,6 +7,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CSharpBenchmarks", "CSharpB
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CharpLearning", "CharpLearning\CharpLearning.csproj", "{323E402F-8D68-4206-90F8-51B44B81FE94}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "net7perf", "net7perf\net7perf.csproj", "{936A6C09-FFE3-4CEF-BC66-7EA81592E84F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DotNet8App", "..\..\..\privateCode\csharp\DotNet8App\DotNet8App.csproj", "{3A0B2719-D6E5-4147-9FFB-6E0F9105EEDD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +25,14 @@ Global
 		{323E402F-8D68-4206-90F8-51B44B81FE94}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{323E402F-8D68-4206-90F8-51B44B81FE94}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{323E402F-8D68-4206-90F8-51B44B81FE94}.Release|Any CPU.Build.0 = Release|Any CPU
+		{936A6C09-FFE3-4CEF-BC66-7EA81592E84F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{936A6C09-FFE3-4CEF-BC66-7EA81592E84F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{936A6C09-FFE3-4CEF-BC66-7EA81592E84F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{936A6C09-FFE3-4CEF-BC66-7EA81592E84F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3A0B2719-D6E5-4147-9FFB-6E0F9105EEDD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3A0B2719-D6E5-4147-9FFB-6E0F9105EEDD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3A0B2719-D6E5-4147-9FFB-6E0F9105EEDD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3A0B2719-D6E5-4147-9FFB-6E0F9105EEDD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
