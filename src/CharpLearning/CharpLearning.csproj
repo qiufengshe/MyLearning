@@ -3,7 +3,7 @@
 	<PropertyGroup>
 		<OutputType>Exe</OutputType>
 		<!--指定.Net版本-->
-		<TargetFramework>net7.0</TargetFramework>
+		<TargetFramework>net8.0</TargetFramework>
 		<AllowUnsafeBlocks>True</AllowUnsafeBlocks>
 		<!--指定c#语言版本为与蓝本(preview)-->
 		<LangVersion>preview</LangVersion>
