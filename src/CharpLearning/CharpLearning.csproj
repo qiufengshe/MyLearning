@@ -10,9 +10,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <Reference Include="System.Drawing.Common">
-	    <HintPath>..\..\..\runtime\artifacts\bin\System.Drawing.Common\Debug\net7.0-windows\System.Drawing.Common.dll</HintPath>
-	  </Reference>
+	  <PackageReference Include="Bogus" Version="34.0.2" />
 	</ItemGroup>
 
 </Project>
