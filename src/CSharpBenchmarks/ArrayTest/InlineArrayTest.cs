@@ -15,30 +15,30 @@ namespace CSharpBenchmarks.ArrayTest
 		[Benchmark]
 		public void TestArray()
 		{
-			Span<int> arr = new int[10];
+			var arr = new int[10];
 			for (int i = 0; i < arr.Length; i++)
 			{
 				arr[i] = i;
 			}
 		}
 
-		[Benchmark]
-		public void TestArray2()
-		{
-			//Span<int> arr = new Test1();
-			//for (int i = 0; i < arr.Length; i++)
-			//{
-			//	arr[i] = i;
-			//}
-		}
+
+		//[Benchmark]
+		//public void TestArray2()
+		//{
+		//	Span<int> arr = new Test1();
+		//	for (int i = 0; i < arr.Length; i++)
+		//	{
+		//		arr[i] = i;
+		//	}
+		//}
 
 	}
-#if NET8_0_OR_GREATER
-	[InlineArray(TestLength)]
-	public struct Test1
-	{
-		public const int TestLength = 10;
-		public int x;
-	}
-#endif
+
+	//[InlineArray(TestLength)]
+	//public struct Test1
+	//{
+	//	public const int TestLength = 10;
+	//	public int x;
+	//}
 }
