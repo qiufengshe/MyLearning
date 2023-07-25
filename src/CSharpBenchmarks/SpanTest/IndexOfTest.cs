@@ -4,40 +4,49 @@ using BenchmarkDotNet.Order;
 
 namespace CSharpBenchmarks.SpanTest
 {
-    [MemoryDiagnoser]
-    [DisassemblyDiagnoser(printSource: true)]
-    [Orderer(SummaryOrderPolicy.FastestToSlowest)]
-    public class IndexOfTest
-    {
-        public byte[] bytes = new byte[] { 0, 0, 0, 0, 71, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 71, 0, 1, 0, 0, 0, 0, 1, 1, 0, 2, 0, 1, 1, 0, 1, 1, 0, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 1, 0 };
+	[MemoryDiagnoser]
+	[DisassemblyDiagnoser(printSource: true)]
+	[Orderer(SummaryOrderPolicy.FastestToSlowest)]
+	public class IndexOfTest
+	{
+		public byte[] bytes = new byte[] { 0, 0, 0, 0, 71, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 71, 0, 1, 0, 0, 0, 0, 1, 1, 0, 2, 0, 1, 1, 0, 1, 1, 0, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 1, 0 };
 
-        public byte[] searchBytes = new byte[] { 0, 1, 0, 0 };
+		public byte[] searchBytes = new byte[] { 0, 1, 0, 0 };
 
-        [Params(1024, 2048)]
-        public int Times { get; set; }
+		[Params(1024, 2048)]
+		public int Times { get; set; }
 
-        [Benchmark]
-        public int SpanIndexOf()
-        {
-            int sum = 0;
-            for (int i = 0; i < Times; i++)
-            {
-                sum += bytes.AsSpan().IndexOf(searchBytes);
-            }
-            return sum;
-        }
 
-        [Benchmark]
-        public int SpanLastIndexOf()
-        {
-            int sum = 0;
-            for (int i = 0; i < Times; i++)
-            {
-                sum += bytes.AsSpan().LastIndexOf(searchBytes);
-            }
-            return sum;
-        }
-    }
+
+		[Benchmark]
+		public int SpanIndexOf()
+		{
+			int sum = 0;
+			for (int i = 0; i < Times; i++)
+			{
+				sum += bytes.AsSpan().IndexOf(searchBytes);
+			}
+			return sum;
+		}
+
+		[Benchmark]
+		public int SpanLastIndexOf()
+		{
+			int sum = 0;
+			for (int i = 0; i < Times; i++)
+			{
+				sum += bytes.AsSpan().LastIndexOf(searchBytes);
+			}
+			return sum;
+		}
+
+		[Benchmark]
+		public int GetSpanLength()
+		{
+			var arr = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 0 };
+			return arr.AsSpan().Length;
+		}
+	}
 }
 
 ////IndeOfValueType源码:

@@ -1,10 +1,10 @@
 ﻿namespace CSharpBenchmarks.ArrayTest
 {
-    public class People
-    {
-        public int Id { get; set; }
+	public class People
+	{
+		public int Id { get; set; }
 
-        public string Name { get; set; }
-    }
+		public string Name { get; set; }
+	}
 }
 

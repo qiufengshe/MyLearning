@@ -6,39 +6,39 @@ using Bogus;
 
 namespace CSharpBenchmarks.ArrayTest
 {
-    [MemoryDiagnoser]
-    [DisassemblyDiagnoser(printSource: true)]
-    public class ImmutableArrayTest
-    {
-        public People[] p1;
+	[MemoryDiagnoser]
+	[DisassemblyDiagnoser(printSource: true)]
+	public class ImmutableArrayTest
+	{
+		public People[] p1;
 
 
-        [Params(100, 1000)]
-        public int Count { get; set; }
+		[Params(100, 1000)]
+		public int Count { get; set; }
 
-        [GlobalSetup]
-        public void Setup()
-        {
-            p1 = new Faker<People>("zh_CN")
-                    .RuleFor(x => x.Id, x => x.IndexFaker += 1)
-                    .RuleFor(x => x.Name, y => y.Person.LastName + y.Person.FirstName)
-                    .UseSeed(1000)
-                    .Generate(Count)
-                    .ToArray();
-        }
+		[GlobalSetup]
+		public void Setup()
+		{
+			p1 = new Faker<People>("zh_CN")
+					.RuleFor(x => x.Id, x => x.IndexFaker += 1)
+					.RuleFor(x => x.Name, y => y.Person.LastName + y.Person.FirstName)
+					.UseSeed(1000)
+					.Generate(Count)
+					.ToArray();
+		}
 
 
-        [Benchmark]
-        public ImmutableArray<People> NewImmutableArrayTest1()
-        {
-            return p1.ToImmutableArray();
-        }
+		[Benchmark]
+		public ImmutableArray<People> NewImmutableArrayTest1()
+		{
+			return p1.ToImmutableArray();
+		}
 
-        [Benchmark]
-        public ImmutableArray<People> NewImmutableArrayTest2()
-        {
-            return Unsafe.As<People[], ImmutableArray<People>>(ref p1);
-        }
+		[Benchmark]
+		public ImmutableArray<People> NewImmutableArrayTest2()
+		{
+			return Unsafe.As<People[], ImmutableArray<People>>(ref p1);
+		}
 
 #if NET8_0_OR_GREATER
         [Benchmark]
@@ -48,10 +48,10 @@ namespace CSharpBenchmarks.ArrayTest
         }
 #endif
 
-        [GlobalCleanup]
-        public void Cleanup()
-        {
-            p1 = null;
-        }
-    }
+		[GlobalCleanup]
+		public void Cleanup()
+		{
+			p1 = null;
+		}
+	}
 }

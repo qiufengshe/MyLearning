@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 using Bogus;
 using CharpLearning.Syntax;
 
@@ -11,9 +12,8 @@ namespace CharpLearning
         {
             //Console.WriteLine("Hello World!");
 
-            int a = 20;
-            int b = 30;
-            int result = AddNum(a, b);
+            StringBuilder sb = new StringBuilder(16);
+            sb.Append("helloworld");
 
             var p1 = new Faker<People>("zh_CN")
                 .RuleFor(x => x.Id, x => x.IndexFaker += 1)

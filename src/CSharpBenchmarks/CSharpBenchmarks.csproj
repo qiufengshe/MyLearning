@@ -6,8 +6,11 @@
 		<TargetFrameworks>net7.0;net8.0</TargetFrameworks>
 		<!--<TargetFrameworks>net7.0</TargetFrameworks>-->
 		<AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+		<!--<TargetFramework>net8.0</TargetFramework>-->
 		<LangVersion>preview</LangVersion>
 		<Nullable>disable</Nullable>
+		<!--<RuntimeFrameworkVersion>8.0.0-rc.1.23371.2</RuntimeFrameworkVersion>
+		<RuntimeIdentifier>win-x64</RuntimeIdentifier>-->
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -17,13 +20,21 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="BenchmarkDotNet" Version="0.13.5" />
+		<PackageReference Include="BenchmarkDotNet" Version="0.13.6" />
 		<PackageReference Include="Bogus" Version="34.0.2" />
 		<PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
 	</ItemGroup>
 
 	<ItemGroup>
 	  <Folder Include="Models\" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <EditorConfigFiles Remove="F:\gitcode\MyLearning\src\CSharpBenchmarks\.editorconfig" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Include="F:\gitcode\MyLearning\src\CSharpBenchmarks\.editorconfig" />
 	</ItemGroup>
 
 </Project>
