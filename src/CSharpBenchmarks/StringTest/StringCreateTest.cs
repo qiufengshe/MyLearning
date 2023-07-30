@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Buffers;
 using BenchmarkDotNet.Attributes;
+using BenchmarkDotNet.Diagnostics.dotTrace;
 
 namespace CSharpBenchmarks.StringTest
 {
+	[DotTraceDiagnoser]
 	[MemoryDiagnoser]
 	[DisassemblyDiagnoser(printSource: true)]
 	public class StringCreateTest
