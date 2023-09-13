@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Runtime.CompilerServices;
 using BenchmarkDotNet.Attributes;
-using System.Runtime.CompilerServices;
 
 namespace CSharpBenchmarks.ArrayTest
 {
@@ -12,33 +7,44 @@ namespace CSharpBenchmarks.ArrayTest
 	[DisassemblyDiagnoser(printSource: true)]
 	public class InlineArrayTest
 	{
-		[Benchmark]
+		[Params(10, 100, 1000)]
+		public int Count { get; set; }
+
+		[Benchmark(Baseline = true)]
 		public void TestArray()
 		{
-			var arr = new int[10];
-			for (int i = 0; i < arr.Length; i++)
+			for (int i = 0; i < Count; i++)
 			{
-				arr[i] = i;
+				var arr = new int[10];
+				for (int j = 0; j < arr.Length; j++)
+				{
+					arr[j] = j;
+				}
 			}
 		}
 
 
-		//[Benchmark]
-		//public void TestArray2()
-		//{
-		//	Span<int> arr = new Test1();
-		//	for (int i = 0; i < arr.Length; i++)
-		//	{
-		//		arr[i] = i;
-		//	}
-		//}
+		[Benchmark]
+		public void TestArray2()
+		{
+			for (int i = 0; i < Count; i++)
+			{
+				Test1 arr = new Test1();
+				for (int j = 0; j < Test1.Length; j++)
+				{
+					arr[j] = j;
+				}
+			}
+		}
 
 	}
 
-	//[InlineArray(TestLength)]
-	//public struct Test1
-	//{
-	//	public const int TestLength = 10;
-	//	public int x;
-	//}
+	//#if NET8_0_OR_GREATER
+	[InlineArray(Length)]
+	public struct Test1
+	{
+		public const int Length = 10;
+		public int x;
+	}
+	//#endif
 }
