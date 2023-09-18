@@ -42,7 +42,7 @@ namespace CSharpBenchmarks.ArrayTest
 		{
 			for (int i = 0; i < Count; i++)
 			{
-				Test1 arr = new Test1();
+				Test1 arr = new Test1();  //内联数组
 				for (int j = 0; j < Test1.Length; j++)
 				{
 					arr[j] = j;
