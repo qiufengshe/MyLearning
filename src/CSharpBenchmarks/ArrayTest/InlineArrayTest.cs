@@ -37,6 +37,8 @@ namespace CSharpBenchmarks.ArrayTest
 			}
 		}
 
+#if NET8_0_OR_GREATER
+
 		[Benchmark]
 		public void TestArray3()
 		{
@@ -49,7 +51,7 @@ namespace CSharpBenchmarks.ArrayTest
 				}
 			}
 		}
-
+#endif
 	}
 
 #if NET8_0_OR_GREATER
