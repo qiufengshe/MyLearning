@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System;
+using System.Text;
 using BenchmarkDotNet.Attributes;
 
 namespace CSharpBenchmarks.StringTest
@@ -19,10 +20,27 @@ namespace CSharpBenchmarks.StringTest
 			}
 		}
 
+		[Benchmark]
+		public void RandomAppendTest()
+		{
+			for (int i = 0; i < Count; i++)
+			{
+				var val = Random.Shared.Next(1, 1024);
+				_ = RandomAppend(val);
+			}
+		}
+
 		public string Append()
 		{
 			StringBuilder sb = new StringBuilder(16);
 			_ = sb.Append("hello world!");
+			return sb.ToString();
+		}
+
+		public string RandomAppend(int val)
+		{
+			StringBuilder sb = new StringBuilder(16);
+			_ = sb.Append($"hello world!{val}");
 			return sb.ToString();
 		}
 	}
