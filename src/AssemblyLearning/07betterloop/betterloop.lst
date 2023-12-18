@@ -1,0 +1,35 @@
+     1                                  ;betterloop.asm
+     2                                  
+     3                                  extern printf
+     4                                  section .data
+     5 00000000 00CA9A3B00000000        	number   dq  1000000000
+     6 00000008 5468652073756D2066-     	fmt      db  "The sum from 0 to %ld is %ld",10,0
+     6 00000011 726F6D203020746F20-
+     6 0000001A 256C6420697320256C-
+     6 00000023 640A00             
+     7                                  section .bss
+     8                                  section .text
+     9                                  	global main
+    10                                  
+    11                                  main:
+    12 00000000 55                      	push rbp
+    13 00000001 4889E5                  	mov  rbp,rsp
+    14                                  
+    15 00000004 488B0C25[00000000]      	mov  rcx,[number]   ;将number放入rcx,后面递减
+    16 0000000C B800000000              	mov  rax,0	    ;初始化rax
+    17                                  
+    18                                  bloop:
+    19 00000011 4801C8                  	add  rax,rcx	    ;将rcx的放入rax 第一次是5 后面依次 4  3  2 1 
+    20 00000014 E2FB                    	loop bloop
+    21 00000016 48BF-                   	mov  rdi,fmt
+    21 00000018 [0800000000000000] 
+    22 00000020 488B3425[00000000]      	mov  rsi,[number]
+    23 00000028 4889C2                  	mov  rdx,rax        ;将rax的值放入到rdx
+    24 0000002B B800000000              	mov  rax,0
+    25 00000030 E8(00000000)            	call printf	
+    26                                  
+    27                                  
+    28 00000035 4889EC                  	mov  rsp,rbp
+    29 00000038 5D                      	pop  rbp
+    30                                  
+    31 00000039 C3                      	ret

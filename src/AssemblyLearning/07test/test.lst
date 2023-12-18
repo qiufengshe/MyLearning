@@ -1,0 +1,38 @@
+     1                                  ; test.asm
+     2                                  
+     3                                  extern printf 
+     4                                  section .data 
+     5 00000000 0A00000000000000        	number1   dd  10,0
+     6 00000008 1F85EB51B81E094000-     	pi        dq  3.14,0
+     6 00000011 00000000000000     
+     7 00000018 6E756D626572313D25-     	fmtint    db  "number1=%d",10,0
+     7 00000021 640A00             
+     8 00000024 70693D256C660A00        	fmtpi	  db  "pi=%lf",10,0	
+     9                                  
+    10                                  section .bss
+    11                                  section .text
+    12                                  	global main
+    13                                  
+    14                                  main:
+    15 00000000 55                      	push rbp
+    16 00000001 4889E5                  	mov  rbp,rsp
+    17                                  	
+    18                                  ;printf number1
+    19 00000004 B800000000              	mov  rax,0
+    20 00000009 488B3425[00000000]      	mov  rsi,[number1]
+    21 00000011 48BF-                   	mov  rdi,fmtint
+    21 00000013 [1800000000000000] 
+    22 0000001B E8(00000000)            	call printf
+    23                                  
+    24                                  ;printf pi
+    25 00000020 B801000000              	mov  rax,1
+    26 00000025 F30F7E0425-             	movq xmm0,[pi]
+    26 0000002A [08000000]         
+    27 0000002E 48BF-                   	mov  rdi,fmtpi
+    27 00000030 [2400000000000000] 
+    28 00000038 E8(00000000)            	call printf
+    29                                  
+    30 0000003D 4889EC                  	mov  rsp,rbp
+    31 00000040 5D                      	pop  rbp
+    32                                  
+    33 00000041 C3                      	ret

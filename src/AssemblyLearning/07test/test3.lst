@@ -1,0 +1,44 @@
+     1                                  ;test3.asm
+     2                                  
+     3                                  extern printf
+     4                                  section .data 
+     5 00000000 0A00000000000000        	number   dq  10
+     6 00000008 1F85EB51B81E0940        	pi       dq  3.14
+     7 00000010 546865206E756D6265-     	fmtint   db  "The number 0 to %d sum=%d",10,0
+     7 00000019 72203020746F202564-
+     7 00000022 2073756D3D25640A00 
+     8 0000002B 256C660A00              	fmtflt   db  "%lf",10,0
+     9                                  
+    10                                  section .bss
+    11                                  section .text
+    12                                  	global main
+    13                                  main:
+    14 00000000 55                      	push  rbp
+    15 00000001 4889E5                  	mov   rbp,rsp
+    16                                  
+    17 00000004 B800000000              	mov   rax,0
+    18 00000009 488B0C25[00000000]      	mov   rcx,[number]
+    19                                  bloop:
+    20 00000011 4801C8                  	add   rax,rcx
+    21 00000014 E2FB                    	loop  bloop
+    22                                  
+    23 00000016 4889C2                  	mov   rdx,rax
+    24 00000019 48BF-                   	mov   rdi,fmtint
+    24 0000001B [1000000000000000] 
+    25 00000023 488B3425[00000000]      	mov   rsi,[number]
+    26 0000002B 4889C2                  	mov   rdx,rax
+    27 0000002E B800000000              	mov   rax,0
+    28 00000033 E8(00000000)            	call  printf
+    29                                  
+    30                                  ;printf pi
+    31 00000038 B801000000              	mov   rax,1
+    32 0000003D F30F7E0425-             	movq  xmm0,[pi]
+    32 00000042 [08000000]         
+    33 00000046 48BF-                   	mov   rdi,fmtflt
+    33 00000048 [2B00000000000000] 
+    34 00000050 E8(00000000)            	call  printf
+    35                                  
+    36 00000055 4889EC                  	mov   rsp,rbp
+    37 00000058 5D                      	pop   rbp
+    38                                  
+    39 00000059 C3                      	ret

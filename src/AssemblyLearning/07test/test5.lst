@@ -1,0 +1,27 @@
+     1                                  ; test5.asm 
+     2                                  ;printf int val
+     3                                  
+     4                                  extern printf
+     5                                  section .data
+     6 00000000 0A000000                	number   dd  10
+     7 00000004 6E756D6265723D2564-     	fmt      db  "number=%d",10,0
+     7 0000000D 0A00               
+     8                                  
+     9                                  section .bss
+    10                                  section .text
+    11                                  	global main
+    12                                  main:
+    13 00000000 55                      	push  rbp
+    14 00000001 4889E5                  	mov   rbp,rsp
+    15                                  ;printf number
+    16 00000004 B800000000              	mov   rax,0
+    17 00000009 48BF-                   	mov   rdi,fmt
+    17 0000000B [0400000000000000] 
+    18 00000013 488B3425[00000000]      	mov   rsi,[number]
+    19 0000001B E8(00000000)            	call  printf	
+    20                                  
+    21 00000020 4889EC                  	mov   rsp,rbp
+    22 00000023 5D                      	pop   rbp
+    23                                  	
+    24 00000024 C3                      	ret
+    25                                  

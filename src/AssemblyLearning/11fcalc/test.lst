@@ -1,0 +1,32 @@
+     1                                  ; 100 sum
+     2                                  
+     3                                  extern printf
+     4                                  section .data
+     5 00000000 6400000000000000        	num 	dq 100
+     6 00000008 0000000000000000        	sum     dq 0
+     7 00000010 3120746F2031303020-     	fmt     db "1 to 100 sum=%d",10,0
+     7 00000019 73756D3D25640A00   
+     8                                  section .bss
+     9                                  section .text
+    10                                  	global main
+    11                                  
+    12                                  main:
+    13 00000000 55                      	push    rbp
+    14 00000001 4889E5                  	mov     rbp,rsp
+    15                                  
+    16 00000004 4831C0                  	xor 	rax,rax
+    17 00000007 488B0C25[00000000]      	mov	rcx,[num]
+    18                                  bloop:
+    19 0000000F 4801C8                  	add	rax,rcx
+    20 00000012 E2FB                    	loop    bloop
+    21                                  	
+    22 00000014 48890425[08000000]      	mov     [sum],rax
+    23 0000001C 48BF-                   	mov     rdi,fmt
+    23 0000001E [1000000000000000] 
+    24 00000026 488B3425[08000000]      	mov     rsi,[sum]
+    25 0000002E B800000000              	mov     rax,0
+    26 00000033 E8(00000000)            	call    printf
+    27                                  
+    28 00000038 4889EC                  	mov     rsp,rbp
+    29 0000003B 5D                      	pop	rbp
+    30 0000003C C3                      	ret

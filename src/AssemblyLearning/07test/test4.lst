@@ -1,0 +1,28 @@
+     1                                  ;test4.asm
+     2                                  
+     3                                  extern printf
+     4                                  
+     5                                  section .data
+     6 00000000 1F85EB51B81E0940        	pi   dq  3.14
+     7 00000008 70693D256C660A00        	fmt  db   "pi=%lf",10,0
+     8                                  
+     9                                  section .bss
+    10                                  section .text
+    11                                  	global main
+    12                                  main:
+    13 00000000 55                      	push  rbp
+    14 00000001 4889E5                  	mov   rbp,rsp
+    15                                  	
+    16                                  ; printf pi 
+    17 00000004 B801000000              	mov   rax,1
+    18 00000009 F30F7E0425-             	movq  xmm0,[pi]
+    18 0000000E [00000000]         
+    19 00000012 48BF-                   	mov   rdi,fmt
+    19 00000014 [0800000000000000] 
+    20 0000001C E8(00000000)            	call  printf
+    21                                  
+    22                                  ; 退出栈
+    23 00000021 4889EC                  	mov   rsp,rbp
+    24 00000024 5D                      	pop   rbp
+    25                                  
+    26 00000025 C3                      	ret

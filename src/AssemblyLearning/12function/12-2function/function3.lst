@@ -1,0 +1,40 @@
+     1                                  
+     2                                  extern printf
+     3                                  section .data
+     4 00000000 0000000000002440        	radius	dq 10.0
+     5 00000008 256C660A00              	fmt     db "%lf",10,0
+     6                                  section .bss
+     7                                  section .text
+     8                                  	global main
+     9                                  ;----------------------
+    10                                  area:
+    11                                  	section .data
+    12 0000000D 7E4D15CB230D0940        		.pi   dq 3.13141592654
+    13                                  	section .text
+    14 00000000 55                      		push   rbp
+    15 00000001 4889E5                  		mov    rbp,rsp
+    16                                  		
+    17 00000004 F20F100425-             		movsd  xmm0,[radius]
+    17 00000009 [00000000]         
+    18 0000000D F20F590425-             		mulsd  xmm0,[radius]
+    18 00000012 [00000000]         
+    19 00000016 F20F590425-             		mulsd  xmm0,[.pi]
+    19 0000001B [0D000000]         
+    20                                  		
+    21 0000001F 4889EC                  		mov    rsp,rbp
+    22 00000022 5D                      		pop    rbp
+    23 00000023 C3                      		ret
+    24                                  
+    25                                  main:
+    26 00000024 55                      	push   rbp
+    27 00000025 4889E5                  	mov    rbp,rsp
+    28                                  
+    29 00000028 E8D3FFFFFF              	call   area
+    30 0000002D 48BF-                   	mov    rdi,fmt
+    30 0000002F [0800000000000000] 
+    31 00000037 B801000000              	mov    rax,1
+    32 0000003C E8(00000000)            	call   printf	
+    33                                  
+    34 00000041 4889EC                  	mov    rsp,rbp
+    35 00000044 5D                      	pop    rbp
+    36 00000045 C3                      	ret

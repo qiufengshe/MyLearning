@@ -1,0 +1,33 @@
+     1                                  ; normal add 
+     2                                  
+     3                                  extern printf 
+     4                                  
+     5                                  section .data
+     6 00000000 6400000000000000        	num1	dq 100
+     7 00000008 3020746F20256C6420-     	fmt     db "0 to %ld sum=%ld",10,0
+     7 00000011 73756D3D256C640A00 
+     8                                  
+     9                                  section .bss
+    10                                  section .text
+    11                                  	global main
+    12                                  main:
+    13 00000000 55                      	push    rbp
+    14 00000001 4889E5                  	mov     rbp,rsp	
+    15 00000004 BB00000000              	mov     rbx,0
+    16 00000009 B800000000              	mov     rax,0
+    17                                  bLoop:
+    18 0000000E 4801D8                  	add     rax,rbx
+    19 00000011 48FFC3                  	inc     rbx
+    20 00000014 483B1C25[00000000]      	cmp     rbx,[num1]
+    21 0000001C 7EF0                    	jle     bLoop
+    22                                  
+    23 0000001E 48BF-                   	mov     rdi,fmt
+    23 00000020 [0800000000000000] 
+    24 00000028 488B3425[00000000]      	mov     rsi,[num1]
+    25 00000030 4889C2                  	mov     rdx,rax
+    26 00000033 B800000000              	mov     rax,0
+    27 00000038 E8(00000000)            	call    printf
+    28                                  	
+    29                                  
+    30 0000003D C9                      	leave
+    31 0000003E C3                      	ret

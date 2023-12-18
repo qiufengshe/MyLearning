@@ -1,0 +1,34 @@
+     1                                  ;sum.asm
+     2                                  
+     3                                  extern printf
+     4                                  section .data
+     5 00000000 0A00000000000000        	num   dq  10
+     6 00000008 6E756D203020746F20-     	fmt   db  "num 0 to %d sum=%d",10,0
+     6 00000011 25642073756D3D2564-
+     6 0000001A 0A00               
+     7                                  
+     8                                  section .bss
+     9                                  section .text
+    10                                  	global main
+    11                                  main:
+    12 00000000 55                      	push  rbp
+    13 00000001 4889E5                  	mov   rbp,rsp
+    14                                  
+    15                                  ;
+    16 00000004 488B0C25[00000000]      	mov   rcx,[num]
+    17 0000000C B800000000              	mov   rax,0
+    18                                  bloop:
+    19 00000011 4801C8                  	add   rax,rcx
+    20 00000014 E2FB                    	loop  bloop  ;每次执行rcx,自动递减1
+    21                                  	
+    22 00000016 48BF-                   	mov   rdi,fmt
+    22 00000018 [0800000000000000] 
+    23 00000020 488B3425[00000000]      	mov   rsi,[num]
+    24 00000028 4889C2                  	mov   rdx,rax
+    25 0000002B B800000000              	mov   rax,0
+    26 00000030 E8(00000000)            	call  printf
+    27                                  
+    28 00000035 4889EC                  	mov   rsp,rbp
+    29 00000038 5D                      	pop   rbp
+    30                                  
+    31 00000039 C3                      	ret
