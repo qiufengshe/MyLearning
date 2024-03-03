@@ -20,7 +20,7 @@ namespace CSharpBenchmarks.StringTest
 		{
 			for (int i = 0; i < Count; i++)
 			{
-				Array(OrderNum);
+				_ = Array(OrderNum);
 			}
 		}
 
@@ -29,7 +29,7 @@ namespace CSharpBenchmarks.StringTest
 		{
 			for (int i = 0; i < Count; i++)
 			{
-				Create(OrderNum);
+				_ = Create(OrderNum);
 			}
 		}
 
@@ -38,7 +38,7 @@ namespace CSharpBenchmarks.StringTest
 		{
 			for (int i = 0; i < Count; i++)
 			{
-				LocalCreate(OrderNum);
+				_ = LocalCreate(OrderNum);
 			}
 		}
 
@@ -47,24 +47,24 @@ namespace CSharpBenchmarks.StringTest
 		{
 			for (int i = 0; i < Count; i++)
 			{
-				StaticCreate(OrderNum);
+				_ = StaticCreate(OrderNum);
 			}
 		}
 
 
 		[Benchmark]
-		public void CreateCaheTest()
+		public void CreateCacheTest()
 		{
 			for (int i = 0; i < Count; i++)
 			{
-				CreateCache(OrderNum);
+				_ = CreateCache(OrderNum);
 			}
 		}
 
 		public string Array(string input)
 		{
 			int len = input.Length;
-			int postion = -1;
+			int position = -1;
 			char[] arr = new char[len];
 			for (int i = 0; i < len; i++)
 			{
@@ -74,17 +74,17 @@ namespace CSharpBenchmarks.StringTest
 				}
 				else
 				{
-					postion = i;
+					position = i;
 					break;
 				}
 			}
 
-			if (postion > 0)
+			if (position > 0)
 			{
-				arr[postion] = 'R';
+				arr[position] = 'R';
 			}
 
-			int start = postion + 1;
+			int start = position + 1;
 			for (int i = start; i < len; i++)
 			{
 				arr[i] = input[i];
@@ -98,7 +98,7 @@ namespace CSharpBenchmarks.StringTest
 			int len = input.Length;
 			return string.Create(len, input, (target, src) =>
 			{
-				int postion = -1;
+				int position = -1;
 				for (int i = 0; i < len; i++)
 				{
 					if (src[i] >= 'A' && src[i] <= 'Z')
@@ -107,17 +107,17 @@ namespace CSharpBenchmarks.StringTest
 					}
 					else
 					{
-						postion = i;
+						position = i;
 						break;
 					}
 				}
 
-				if (postion > 0)
+				if (position > 0)
 				{
-					target[postion] = 'R';
+					target[position] = 'R';
 				}
 
-				int start = postion + 1;
+				int start = position + 1;
 				for (int i = start; i < len; i++)
 				{
 					target[i] = src[i];
@@ -171,11 +171,11 @@ namespace CSharpBenchmarks.StringTest
 		public string StaticCreate(string input)
 		{
 			int len = input.Length;
-			//在委托前加入static关键字修饰,主要避免创建多余的委托对象
-			//在C# 9加入,静态匿名函数(包含lambda和匿名函数)
+			//在委托前static关键字修饰,主要避免创建多余的委托对象
+			//在C# 9加入,静态匿名函数(lambda和匿名函数)
 			return string.Create(len, input, static (target, src) =>
 			{
-				int postion = -1;
+				int position = -1;
 				int strLen = target.Length;
 				for (int i = 0; i < strLen; i++)
 				{
@@ -185,17 +185,17 @@ namespace CSharpBenchmarks.StringTest
 					}
 					else
 					{
-						postion = i;
+						position = i;
 						break;
 					}
 				}
 
-				if (postion > 0)
+				if (position > 0)
 				{
-					target[postion] = 'R';
+					target[position] = 'R';
 				}
 
-				int start = postion + 1;
+				int start = position + 1;
 				for (int i = start; i < strLen; i++)
 				{
 					target[i] = src[i];
@@ -205,7 +205,7 @@ namespace CSharpBenchmarks.StringTest
 
 		public void CreateAction(Span<char> target, string src)
 		{
-			int postion = -1;
+			int position = -1;
 			for (int i = 0; i < src.Length; i++)
 			{
 				if (src[i] >= 'A' && src[i] <= 'Z')
@@ -214,17 +214,17 @@ namespace CSharpBenchmarks.StringTest
 				}
 				else
 				{
-					postion = i;
+					position = i;
 					break;
 				}
 			}
 
-			if (postion > 0)
+			if (position > 0)
 			{
-				target[postion] = 'R';
+				target[position] = 'R';
 			}
 
-			int start = postion + 1;
+			int start = position + 1;
 			for (int i = start; i < src.Length; i++)
 			{
 				target[i] = src[i];
