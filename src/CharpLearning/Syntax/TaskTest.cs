@@ -145,7 +145,7 @@ namespace CharpLearning.Syntax
 
         public void Wait()
         {
-            ManualResetEventSlim? mres = null;
+            ManualResetEventSlim mres = null;
             lock (this)
             {
                 if (!_completed)
@@ -346,5 +346,4 @@ namespace CharpLearning.Syntax
             }
         }
     }
-}
 }

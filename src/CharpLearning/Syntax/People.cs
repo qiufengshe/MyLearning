@@ -9,5 +9,7 @@
         public string Description { get; set; }
 
         public decimal Salary { get; set; }
+
+        private int age;
     }
 }
