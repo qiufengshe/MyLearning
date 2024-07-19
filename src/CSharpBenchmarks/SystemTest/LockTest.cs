@@ -22,7 +22,7 @@ namespace CSharpBenchmarks.SystemTest
 			{
 				tasks[i] = Task.Run(() =>
 				{
-					for (int j = 0; j < 10000; j++)
+					for (int j = 0; j < 1000000; j++)
 					{
 						lock (obj)
 						{
@@ -46,7 +46,7 @@ namespace CSharpBenchmarks.SystemTest
 				tasks[i] = Task.Run(() =>
 				{
 
-					for (var j = 0; j < 10000; ++j)
+					for (var j = 0; j < 1000000; ++j)
 					{
 						lock (@lock)
 						{
