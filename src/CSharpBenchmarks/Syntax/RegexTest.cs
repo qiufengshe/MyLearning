@@ -23,8 +23,6 @@ namespace CSharpBenchmarks.Syntax
 		//2. 使用static和partial进行声明
 		public static partial Regex MyRegex();
 
-
-
 		[Benchmark(Baseline = true)]
 		public void Before()
 		{
