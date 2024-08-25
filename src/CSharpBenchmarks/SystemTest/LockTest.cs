@@ -11,9 +11,9 @@ namespace CSharpBenchmarks.SystemTest
 	public class LockTest
 	{
 		private readonly static object obj = new();
-		private readonly static Lock @lock = new();
+		private readonly static Lock @lock = new(); //新的方式,不再使用object而是使用Lock
 
-		[Benchmark]
+		[Benchmark(Baseline = true)]
 		public async Task<long> LockObject()
 		{
 			long count = 0;
@@ -48,7 +48,7 @@ namespace CSharpBenchmarks.SystemTest
 
 					for (var j = 0; j < 1000000; ++j)
 					{
-						lock (@lock)
+						lock (@lock)  //lock 
 						{
 							count += 1;
 						}
