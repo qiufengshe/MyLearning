@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
 using Bogus;
 using CharpLearning.Syntax;
 
@@ -8,11 +9,12 @@ namespace CharpLearning
 {
     class Program
     {
+        public Lock @lock = new();
         static void Main(string[] args)
         {
             //Console.WriteLine("Hello World!");
 
-            StringBuilder sb = new StringBuilder(16);
+            StringBuilder sb = new(16);
             sb.Append("helloworld");
 
             var p1 = new Faker<People>("zh_CN")
