@@ -19,7 +19,7 @@ namespace CSharpBenchmarks.ArrayTest
 			random = Random.Shared;
 		}
 
-		[Params(64, 128, 512)]
+		[Params(64, 128)]
 		public int Count { get; set; }
 
 		[Benchmark]
@@ -74,7 +74,7 @@ namespace CSharpBenchmarks.ArrayTest
 			return sum;
 		}
 
-		public int SpanSum(Span<int> span)
+		public int SpanSum(params ReadOnlySpan<int> span)
 		{
 			int sum = 0;
 			for (int i = 0; i < span.Length; i++)

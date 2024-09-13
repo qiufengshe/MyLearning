@@ -6,8 +6,7 @@ namespace CSharpBenchmarks.Syntax
 	[DisassemblyDiagnoser(printSource: true, maxDepth: 3)]
 	public class FunctionPointer
 	{
-
-		static int Add(int a, int b)
+		private static int Add(int a, int b)
 		{
 			return a + b;
 		}
