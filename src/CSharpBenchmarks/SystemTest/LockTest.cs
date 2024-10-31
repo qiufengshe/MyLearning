@@ -1,10 +1,12 @@
-﻿using System.Threading;
+﻿#if NET9_0_OR_GREATER
+using System.Threading;
 using System.Threading.Tasks;
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Order;
 
 namespace CSharpBenchmarks.SystemTest
 {
+
 	[MemoryDiagnoser]
 	[DisassemblyDiagnoser(printSource: true)]
 	[Orderer(SummaryOrderPolicy.FastestToSlowest)]
@@ -60,3 +62,4 @@ namespace CSharpBenchmarks.SystemTest
 		}
 	}
 }
+#endif
