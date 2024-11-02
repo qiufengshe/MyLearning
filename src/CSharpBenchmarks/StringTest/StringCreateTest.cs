@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Buffers;
+using System.Text;
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Diagnostics.dotTrace;
 
@@ -92,6 +93,39 @@ namespace CSharpBenchmarks.StringTest
 
 			return new string(arr, 0, len);
 		}
+
+		public string Array1(string input)
+		{
+			int len = input.Length;
+			int position = -1;
+			char[] arr = new char[len];
+			for (int i = 0; i < len; i++)
+			{
+				if (input[i] >= 'A' && input[i] <= 'Z')
+				{
+					arr[i] = input[i];
+				}
+				else
+				{
+					position = i;
+					break;
+				}
+			}
+
+			if (position > 0)
+			{
+				arr[position] = 'R';
+			}
+
+			int start = position + 1;
+			for (int i = start; i < len; i++)
+			{
+				arr[i] = input[i];
+			}
+
+			return Encoding.UTF8.GetString(Encoding.UTF8.GetBytes(arr));
+		}
+
 
 		public string Create(string input)
 		{

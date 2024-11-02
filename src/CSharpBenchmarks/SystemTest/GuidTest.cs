@@ -1,4 +1,5 @@
-﻿using System;
+﻿#if NET9_0_OR_GREATER
+using System;
 using System.Collections.Generic;
 using System.Security.Cryptography;
 using BenchmarkDotNet.Attributes;
@@ -165,7 +166,7 @@ public class SequentialGuidGenerator
 		return new Guid(guidBytes);
 	}
 }
-
+#endif
 
 //public class GuidExtension
 //{
