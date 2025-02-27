@@ -1,14 +1,13 @@
 ﻿using System;
 using BenchmarkDotNet.Attributes;
-using BenchmarkDotNet.Columns;
 
 namespace CSharpBenchmarks.MathTest
 {
 	[DisassemblyDiagnoser(printSource: true, maxDepth: 3)]
 	[MemoryDiagnoser]
-	[SimpleJob(BenchmarkDotNet.Jobs.RuntimeMoniker.NativeAot70)]
-	[HideColumns(Column.Gen2)]  //隐藏GC2代列
-								//[AotFilter("不支持NativeAot")]
+	//[SimpleJob(BenchmarkDotNet.Jobs.RuntimeMoniker.NativeAot70)]
+	//[HideColumns(Column.Gen2)]  //隐藏GC2代列
+	//[AotFilter("不支持NativeAot")]
 	public class RoundTest
 	{
 		[Params(1.5)]

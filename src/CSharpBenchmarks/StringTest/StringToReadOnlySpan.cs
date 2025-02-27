@@ -13,10 +13,10 @@ namespace CSharpBenchmarks.StringTest
 	[DisassemblyDiagnoser(printSource: true)]
 	public class StringToReadOnlySpan
 	{
-		[Params(1024, 2048)]
+		[Params(100, 1000,10000)]
 		public int Times { get; set; }
 
-		[Params('t', 's')]
+		[Params("Test", "TestAsync")]
 		public string Names { get; set; }
 
 		[Benchmark]
@@ -30,7 +30,7 @@ namespace CSharpBenchmarks.StringTest
 			return count;
 		}
 
-		[Benchmark]
+		[Benchmark(Baseline = true)]
 		public int StringTest()
 		{
 			int count = 0;
