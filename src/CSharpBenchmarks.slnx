@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="CharpLearning/CharpLearning.csproj" />
+  <Project Path="CSharpBenchmarks/CSharpBenchmarks.csproj" />
+  <!--<Project Path="FengDaDaApp/FengDaDaApp.csproj" />-->
+</Solution>
