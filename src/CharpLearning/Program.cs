@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 using Bogus;
+using CharpLearning.Pattern;
 using CharpLearning.Syntax;
 
 namespace CharpLearning
@@ -50,6 +51,24 @@ namespace CharpLearning
             int[] row1 = [4, 5, 6];
             int[] row2 = [7, 8, 9];
             int[][] twoDFromVariables = [row0, row1, row2];
+
+            //契约组合模式
+            Account account = new Account()
+            {
+                IsActive = true,
+                Amount = 3000
+            };
+
+            var spec = new ActiveAccountSpecification()
+                .And(new AccountAmoutSpecification(2000));
+            if (spec.IsSatisfiedBy(account))
+            {
+                Console.WriteLine("valid rules");
+            }
+            else
+            {
+                Console.WriteLine("invalid rules");
+            }
         }
 
         static int AddNum(int a, int b)
