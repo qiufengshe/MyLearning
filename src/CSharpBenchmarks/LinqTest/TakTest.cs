@@ -10,7 +10,7 @@ namespace net6perf.LinqTest
 	[Orderer(SummaryOrderPolicy.FastestToSlowest)]
 	public class TakTest
 	{
-		public int[] bytes = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 42, 48, 98, 10 };
+		public int[] bytes = [1, 2, 3, 4, 5, 6, 7, 8, 9, 42, 48, 98, 10];
 
 		[Params(1024, 2048)]
 		public int Times { get; set; }
