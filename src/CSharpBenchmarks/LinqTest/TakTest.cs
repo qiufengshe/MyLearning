@@ -35,7 +35,7 @@ namespace net6perf.LinqTest
 			int sum = 0;
 			for (int i = 0; i < Times; i++)
 			{
-				var array = bytes.AsSpan().Slice(0, 5);
+				var array = bytes.AsSpan(0, 5);
 				sum += array.Length;
 			}
 

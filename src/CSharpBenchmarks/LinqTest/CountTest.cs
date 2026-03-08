@@ -10,7 +10,7 @@ namespace CSharpBenchmarks.LinqTest
 	[Orderer(SummaryOrderPolicy.FastestToSlowest)]
 	public class CountTest
 	{
-		private static List<int> Numbers = new(1000);
+		private static readonly List<int> Numbers = new(1000);
 
 		static CountTest()
 		{

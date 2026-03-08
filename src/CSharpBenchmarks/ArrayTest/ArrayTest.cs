@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+using System;
 using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
@@ -61,18 +60,18 @@ namespace CSharpBenchmarks.ArrayTest
 			}
 		}
 
-		[Benchmark]
-		public int SumTest(int[] array)
-		{
-			int sum = 0;
-			IEnumerable<int> temp = array;
+		//[Benchmark]
+		//public int SumTest(int[] array)
+		//{
+		//	int sum = 0;
+		//	IEnumerable<int> temp = array;
 
-			foreach (var num in temp)
-			{
-				sum += num;
-			}
-			return sum;
-		}
+		//	foreach (var num in temp)
+		//	{
+		//		sum += num;
+		//	}
+		//	return sum;
+		//}
 
 		private static T SumCore<T>(ReadOnlySpan<T> source)
 where T : struct, INumber<T>
