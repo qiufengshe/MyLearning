@@ -1,7 +1,7 @@
 using System;
-using System.Text.Json;
 using BenchmarkDotNet.Attributes;
 
+namespace CSharpBenchmarks.StringTest;
 
 [DisassemblyDiagnoser(printSource: true, maxDepth: 3)]
 [MemoryDiagnoser]
@@ -18,7 +18,7 @@ public class DatetimeStringTest
 		for (var i = 0; i < Count; i++)
 		{
 			var ((year, month, day), (hour, minute, second)) = DateTime.Now;
-			var s = $"{year}/{month}/{day} {hour}:{minute}:{second}";
+			var s = $"{year}-{month}-{day} {hour}:{minute}:{second}";
 			sum += s.Length;
 		}
 	}
