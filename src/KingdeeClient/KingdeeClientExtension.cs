@@ -23,12 +23,13 @@ namespace KingdeeClient
 
         public static IServiceCollection AddMultiKingdeeClient(this IServiceCollection services, string configNodeName, IConfiguration configuration, List<string> keys)
         {
-
+            services.AddTransient<AuthHttpMessageHandle>();
             services.AddHttpClient(configNodeName, client =>
             {
                 client.BaseAddress = new Uri(configNodeName);
                 client.DefaultRequestHeaders.UserAgent.ParseAdd("HttpClient/8.0");
-            });
+            })
+            .AddHttpMessageHandler<AuthHttpMessageHandle>();
 
             foreach (var key in keys)
             {
